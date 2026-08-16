@@ -274,18 +274,18 @@ The team participated as a **finalist at the state-level stage**.
 
 ### Team Lead
 
-**VISHAL V NAIR**
+* **[VISHAL V NAIR](https://github.com/vishalvnair124)** - Team Lead
 
 
 ### Team Members
 
-* **SETHU S NAIR**
-* **ABHIN M**
-* **ABI BINU**
-* **Harijith**
-* **Anandhu V Nair**
-* **Robin P Danel**
-* **Adarsh**
+* **[SETHU S NAIR](https://github.com/Sethusnair)**
+* **[ABHIN M](https://github.com/mrabhin03)**
+* **[ABI BINU](https://github.com/abibinu)**
+* **[Harijith](https://github.com/Hari2020codes)**
+* **[Anandhu V Nair](https://github.com/ananduvnair)**
+* **[Robin P Danel](https://github.com/R0BIN-H00D)**
+* **[Adarsh](https://github.com/AdarshAnil-04)**
 
 ---
 
