@@ -1,0 +1,174 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(#1ec7e9, #2196f3);
+    overflow: hidden;
+}
+
+.wrapper {
+    width: fit-content;
+    height: fit-content;
+}
+
+.form-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    background: #fff;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.437);
+    border-radius: 25px;
+    border: 2px solid #ffffff;
+}
+
+
+h2 {
+    font-size: 30px;
+    color: #555;
+    text-align: center;
+}
+
+.input-group {
+    position: relative;
+    width: 320px;
+    margin: 30px 0;
+}
+
+.input-group label {
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: #333;
+    padding: 0 5px;
+    pointer-events: none;
+    transition: .5s;
+}
+
+.input-group input {
+    width: 100%;
+    height: 40px;
+    font-size: 16px;
+    color: #333;
+    padding: 0 10px;
+    background: transparent;
+    border: 1px solid #333;
+    outline: none;
+    border-radius: 5px;
+}
+
+.input-group input:focus~label,
+.input-group input:not(:placeholder-shown)~label {
+    top: 0;
+    font-size: 12px;
+    background: #fff;
+}
+
+
+.btn {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    background: linear-gradient(to left, #2196f3, #1ec4e9);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .4);
+    font-size: 16px;
+    color: #fff;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+}
+
+.error-message {
+    color: rgb(255, 51, 0);
+    font-size: 13px;
+    margin-top: -12px;
+
+}
+#insta-main{
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.29);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    display: grid;
+    place-content: center;
+    backdrop-filter: blur(10px);
+}
+.insta-box{
+    width: 330px;
+    padding: 20px;
+    padding-top:10px;
+    padding-bottom: 35px;
+    background-color: white;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    animation: popup .2s ease-in-out forwards ;
+}
+@keyframes popup {
+    0%{
+        transform: scale(.5);
+    }
+    100%{
+        transform: scale(1);
+    }
+}
+.insta-box img{
+    height: 130px;
+    width: 130px;
+    border-radius: 50%;
+    margin: 10px;
+    margin-bottom: 5px;
+}
+.insta-box h3{
+    color: red;
+    font-size: 30px;
+    margin-top: 0;
+    padding: 0;
+}
+.insta-box h4{
+    color: rgb(23, 23, 23);
+    font-weight: 500;
+    font-size: 16px;
+}
+.insta-box .title{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-weight: 550;
+}
+.insta-box a{
+    text-decoration: none;
+    color: black;
+    margin: 0;
+}
+.insta-box .close{
+    width: 100%;
+    font-size: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+.insta-box .close ion-icon {
+    cursor: pointer;
+}

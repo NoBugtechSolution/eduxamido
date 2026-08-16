@@ -1,0 +1,218 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f2f5;
+  color: #333;
+  padding: 20px;
+}
+h1 {
+  color: #2c3e50;
+}
+table {
+  border-collapse: collapse;
+  margin: 10px 0;
+  width: 100%;
+  max-width: 1000px;
+  height: fit-content;
+}
+th,
+td {
+  border: 2px solid #ddd;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+th {
+  padding: 10px;
+  background-color: #f2f2f2;
+  cursor: pointer;
+}
+td {
+  padding: 2px;
+  background-color: #fff;
+  cursor: pointer;
+}
+td:hover {
+  background-color: #f5f5f5 !important;
+  color: black;
+}
+.seat {
+  padding: 10px;
+  background-color: #3498db;
+  color: white;
+  border-radius: 4px;
+  transform: rotateX(90deg);
+  animation: Loader 0.3s ease-in-out forwards;
+  transition: all 0.3s ease-in-out;
+}
+@keyframes Loader {
+  from {
+    transform: rotateX(80deg);
+  }
+  to {
+    transform: rotateX(0deg);
+  }
+}
+.nill {
+  border-radius: 4px;
+  padding: 10px;
+  background-color: #e74c3c;
+  color: white;
+}
+.classroom {
+  margin-bottom: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+button:hover {
+  background-color: #2980b9;
+}
+center > h1 {
+  color: green !important;
+}
+h2 .invs {
+  font-size: 33px;
+  text-decoration: underline;
+}
+.headervalue {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.headervalue button {
+  height: fit-content;
+  padding: 10px 22px;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  align-items: center;
+}
+
+.headervalue a {
+  text-decoration: none;
+}
+td:has(input[type="checkbox"]:checked) .seat ,.pickedRollNo:has(input[type="checkbox"]:checked) .seat{
+  background-color: red !important;
+  border-radius: 20px;
+}
+
+.menu{
+  font-size: 30px;
+  cursor: pointer;
+  /* margin: 10px; */
+  background-color: rgba(27, 27, 27, 0.079);
+  color: white;
+  padding: 0 10px;
+  padding-top: 10px;
+}
+
+
+#CheckValues,#TableList {
+  display: none;
+}
+center{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+center ion-icon{
+  cursor: pointer;
+  font-size: 35px;
+}
+.selected-list {
+    overflow: hidden;
+    background-color: #0e87d8;
+    /* border: 4px solid black; */
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    position: fixed;
+    /* padding: 15px; */
+    box-sizing: border-box;
+    width: 320px;
+    height: 98%;
+    top: 1%;
+    right: -350px;
+    z-index: 5;
+    display: flex;
+    align-items: baseline;
+    justify-content: baseline;
+    flex-direction: column;
+    transition: right .3s ease-in-out;
+}
+.selected-list.Open{
+  right:.1%;
+}
+.selected-list h4{
+  color: white;
+  background-color: rgba(18, 18, 18, 0.286);
+  padding: 5px 10px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  width: 100%;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.options{
+  
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* grid-template-columns: repeat(2,1fr); */
+    gap:10px;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+.options .Option-buttons{
+  background-color: rgb(177, 52, 52);
+  border-radius: 5px;
+  font-size: 15px;
+  width: 100%;
+  transition: all .2s ease-in-out;
+  border: 2px solid transparent;
+  pointer-events: none;
+}
+.options .Option-buttons.Active{
+  width: 100%;
+  pointer-events: all;
+  background-color: rgb(3, 92, 181);
+  border-radius: 10px;
+  border: 2px solid white;
+}
+#pickedRoll{
+    padding: 10px;
+    background-color: rgba(29, 29, 29, 0.085);
+    box-sizing: border-box;
+    flex-grow: 1;
+    width: 100%;
+    place-content: baseline;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 10px;
+}
+#pickedRoll .pickedRollNo{
+    color: white;
+    text-align: center;
+    height: fit-content;
+    /* overflow: hidden; */
+    border-radius: 10px;
+}
+.pickedRollNo .seat{
+  border: 2px solid white;
+}
+

@@ -1,0 +1,146 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+h1 {
+    color: #2c3e50;
+}
+.home-nav {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 300px;
+    width: 100%;
+    margin-bottom: 20px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+}
+button{
+    padding: 8px;
+    border-radius: 4px;
+    transition: border-color 0.3s ease;
+    border-color: #3498db;
+    outline: none;
+}
+button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+button:hover {
+    background-color: #2980b9;
+}
+form {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 100%;
+    margin-bottom: 20px;
+    
+}
+form:not(.noflex) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+label, input,select {
+    display: block;
+    margin: 10px 0;
+    width: 100%;
+}
+input[type="text"], input[type="number"],input[type="file"],input[type="date"],select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: border-color 0.3s ease;
+}
+input[type="text"]:focus, input[type="number"]:focus,input[type="file"]:focus,input[type="date"]:focus,select:focus {
+    border-color: #3498db;
+    outline: none;
+}
+input[type="submit"] {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+input[type="submit"]:hover {
+    background-color: #2980b9;
+}
+
+.studentsdetails {
+            
+    width: 80%;
+    border-collapse: collapse;
+    margin: 20px auto;
+    order:1;
+    /* border-radius:10px; */
+}
+
+.studentsdetails th,
+.studentsdetails td {
+    border: 1px solid #000;
+    padding: 8px;
+    text-align: center;
+    font-size:14px;
+}
+.studentsdetails tr:nth-child(odd){
+    background-color: #eaeaea;
+}
+
+.studentsdetails th {
+    color:white;
+    background-color: #8282dd;
+}
+
+input[type="checkbox"] {
+    opacity: 1;
+    cursor: not-allowed; 
+}
+
+.date-inputs {
+    margin: 10px 0;
+}
+.add-date-btn {
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: block;
+    margin: 10px 0;
+}
+.add-date-btn:hover {
+    background-color: #27ae60;
+}
+.supply-Table{
+    width: 100%;
+    /* border-collapse: collapse; */
+}
+.supply-Table tr{
+    background-color: #f3f3f3;
+}
+.supply-Table td{
+    padding:0px 30px 0px 20px;
+}
+.odds{
+    background-color: #eeeeee !important;
+}

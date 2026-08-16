@@ -1,0 +1,425 @@
+<?php
+include('Connections.php');
+include('Session.php');
+
+$colors=['#3f98df','#3470db','#3060aa','#4f98db','#3498db','#3498db'];
+$departmentDatav1=[];
+
+
+
+?>
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>Seating Arrangement</title>
+<style>
+        body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f2f5;
+        color: #333;
+        padding: 20px;
+        }
+        h1 {
+        color: #2c3e50;
+        }
+        table {
+        border-collapse: collapse;
+        margin: 10px 0;
+        width: 100%;
+        max-width: 1000px;
+        }
+        th, td {
+        border: 2px solid #ddd;
+        padding: 8px;
+        text-align: center;
+        transition: background-color 0.3s ease;
+        }
+        th {
+        background-color: #f2f2f2;
+        }
+        td {
+        background-color: #fff;
+        cursor: pointer;
+        }
+        td:hover {
+        background-color: #f5f5f5 !important;
+        color: black;
+        }
+        .seat {
+        padding: 10px;
+        background-color: #3498db;
+        color: white;
+        border-radius: 4px;
+        transform: rotateX(90deg);
+        animation: Loader .3s  ease-in-out forwards;
+        }
+        @keyframes Loader {
+            from{
+                transform: rotateX(80deg);
+            }
+            to{
+                transform: rotateX(0deg);
+            }
+        }
+        .nill {
+        background-color: #e74c3c;
+        color: white;
+        }
+        .classroom {
+        margin-bottom: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        }
+        button{
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+</style>
+</head>
+<body>
+
+
+<?php
+
+
+// define('ROWS', 7);
+// define('COLS', 5);
+// define('MAX_CLASS_STUDENT', ROWS * COLS);
+
+
+class Classroom {
+    public $roomNum;
+    public $assignedNum = 0;
+    public $seat = [];
+    public $ROW=0;
+    public $COLUMN=0;
+    public $Name;
+    public $ClassID=0;
+
+    public function __construct($roomNum,$Row,$Column,$ClassName,$ClID) {
+        $this->ROW=$Row;
+        $this->COLUMN=$Column;
+        $this->ClassID=$ClID;
+        $this->Name=$ClassName;
+        $this->roomNum = $roomNum + 1;
+        $this->seat = array_fill(0, $Row, array_fill(0, $Column, ''));
+    }
+}
+
+function assignSeats($classrooms, $studentsBySubject,$suppliesStudents) {
+    $subjectKeys = array_keys($studentsBySubject);
+    $SupplysubjectKeys = array_keys($suppliesStudents);
+    $totalSubjects = count($subjectKeys);
+    $totalStudentsAssigned = 0;
+    $totalStudents = array_sum(array_map('count', $studentsBySubject));
+
+    // Initialize student indices for each subject
+    $studentIndices = array_fill(0, $totalSubjects, 0);
+
+    // Track current classroom index and subject index
+    $classroomIndex = 0;
+    $subjectIndex = 0;
+    while ($totalStudentsAssigned < $totalStudents) {
+        $currentClassroom = $classrooms[$classroomIndex];
+        $currentColumn = 0;
+        $MAX_CLASS_STUDENT=$currentClassroom->ROW*$currentClassroom->COLUMN;
+
+        // Fill the current classroom completely before moving to the next
+        while ($currentColumn < $currentClassroom->COLUMN && $currentClassroom->assignedNum < $MAX_CLASS_STUDENT) {
+            $subject = $subjectKeys[$subjectIndex % $totalSubjects];
+            $students = $studentsBySubject[$subject];
+            $studentCount = count($students);
+
+            for ($rowIndex = 0; $rowIndex < $currentClassroom->ROW; $rowIndex++) {
+                // echo "<br>".$subjectKeys[$subjectIndex % $totalSubjects]."  :  ".$studentIndices[$subjectIndex % $totalSubjects]."            $studentCount";
+                if ($studentIndices[$subjectIndex % $totalSubjects] >= $studentCount) {
+                //    echo" Stopped<br>";
+                    unset($studentIndices[$subjectIndex % $totalSubjects]);
+                    unset($subjectKeys[$subjectIndex % $totalSubjects]);
+
+                    $studentIndices = array_values($studentIndices);
+                    $subjectKeys = array_values($subjectKeys);
+
+                    $totalSubjects-=1;
+                    if($totalSubjects==0){
+                        if(count($SupplysubjectKeys)==0){
+                            break 2;
+                        }else{
+                            $totalSubjects=count($SupplysubjectKeys);
+                            $subjectIndex=0;
+                            $subject=$SupplysubjectKeys[$subjectIndex % $totalSubjects]
+                            $SupplysubjectKeys=[];
+                            
+                        }
+                        
+                        
+                    }
+                    $subject = $subjectKeys[$subjectIndex % $totalSubjects];
+
+                    $students = $studentsBySubject[$subject];
+                    $studentCount = count($students);
+                    // echo "<br>COntinue ".$subjectKeys[$subjectIndex % $totalSubjects]."  :  ".$studentIndices[$subjectIndex % $totalSubjects]."            $studentCount";
+                    $rowIndex--;
+                    continue;
+                }
+                $temp=$currentClassroom->seat[$rowIndex][$currentColumn] = $students[$studentIndices[$subjectIndex % $totalSubjects]];
+                // echo "CLASS: ".$classroomIndex." ROW: ".$rowIndex." Colu: ".$currentColumn." Num: ".$temp."   ll".$studentIndices[$subjectIndex % $totalSubjects]."<br>";
+                
+                $currentClassroom->assignedNum++;
+                $studentIndices[$subjectIndex % $totalSubjects]++;
+            
+                $totalStudentsAssigned++;
+                
+
+                if ($currentClassroom->assignedNum >= $MAX_CLASS_STUDENT) break;
+            }
+
+            $currentColumn++;
+            $subjectIndex++;
+        }
+
+        // Move to the next classroom if the current one is filled
+
+        // if ($currentClassroom->assignedNum >= MAX_CLASS_STUDENT) {
+            $classroomIndex++;
+        // }
+
+        // Ensure we break the loop if there are no more classrooms left
+        if ($classroomIndex >= count($classrooms)) break;
+    }
+}
+    $Eid=$_SESSION['ExaminationID'];
+
+    if(isset($_POST['classes'])){
+
+        $selectdate="SELECT DISTINCT(ExamDate) FROM `examsubjects` WHERE ExamID=$Eid ";
+        $datedetails=$conn->query($selectdate);
+        $classids=$_POST['classes'];
+        $classdate=0;
+        
+        while($datedetailsrow=$datedetails->fetch_assoc()){
+            $dateID=$datedetailsrow['ExamDate'];
+            $getsubsql="SELECT * FROM `subject_for_programmes` INNER JOIN examsubjects on subject_for_programmes.examsubjectsID=examsubjects.examsubjectsID WHERE examsubjects.ExamDate='$dateID'";
+            $getval=$conn->query($getsubsql);
+            $departarrayv1="";
+            while($subjectsDate=$getval->fetch_assoc()){
+                $departarrayv1.=$subjectsDate['programmes'].",";
+            }
+            $departarrayv1=substr($departarrayv1, 0, -1);
+            // echo $departarrayv1;
+            $DeaprtmentData = explode(',', $departarrayv1);
+            // echo count($DeaprtmentData);
+            $datevalue=$datedetailsrow['ExamDate'];
+            $classValues=$classids[$classdate];
+            $classdate++;
+        if (count($DeaprtmentData)>0) {
+            $subjectStudentsArr = [];
+            $suppliesStudents=[];
+            $totalStudents = 0;
+            
+            foreach ($DeaprtmentData as $departdata){
+                $subjectCode=$departdata;
+                $subjectStudentsArr[$subjectCode] = [];
+                $subject_select="SELECT * FROM `examsubjects` 
+                INNER JOIN exam_students on exam_students.examsubjectsID=examsubjects.examsubjectsID
+                INNER JOIN students_details on students_details.RollNo=exam_students.RollNo
+                WHERE students_details.Department='$subjectCode' AND examsubjects.ExamID=$Eid AND examsubjects.ExamDate='$dateID'";
+                // echo $subject_select;
+                $subject_select_q=$conn->query($subject_select);
+                while($row2=$subject_select_q->fetch_assoc()){
+                    if($row2['exam_status']!=-1){
+                        $subjectStudentsArr[$subjectCode][] = $row2['RollNo']."-".$row2['exam_sub_stu_ID'];
+                    }else{
+                        $suppliesStudents[$subjectCode][]=$row2['RollNo']."-".$row2['exam_sub_stu_ID'];
+                    }
+                }
+                $totalStudents += intval($subject_select_q->num_rows);
+            }
+
+            $class_data=getclass($totalStudents,$classValues);
+            $totalClasses=count($class_data);
+            $classrooms = array_map(function ($i)use ($class_data) {
+                return new Classroom($i,$class_data[$i]['ClassRows'],$class_data[$i]['ClassColumns'],$class_data[$i]['ClassName'],$class_data[$i]['ClassID']);
+            }, range(0, $totalClasses - 1));
+
+            assignSeats($classrooms, $subjectStudentsArr,$suppliesStudents);
+
+            foreach ($classrooms as $classroom) {
+                $class_row=1;
+                foreach ($classroom->seat as $row) {
+                    $ClassID=$classroom->ClassID;
+                    $class_col=1;
+                    foreach ($row as $seat) {
+                        if($seat){
+                            $Details = explode('-', $seat);
+                            // $rollnum=$Details[0];
+                            $stu_ID=$Details[1];
+                            $CheckSeatsql="SELECT * FROM exam_stu_seating WHERE exam_sub_stu_ID='$stu_ID'";
+                            $checkseat=$conn->query($CheckSeatsql);
+                            if($checkseat->num_rows>0){
+                                $seatingdata="UPDATE `exam_stu_seating` SET `ClassID`='$ClassID',`class_row`='$class_row',`class_col`='$class_col' WHERE `exam_sub_stu_ID`='$stu_ID'";
+                                // echo $seatingdata;
+                            }else{
+                                $seatingdata="INSERT INTO `exam_stu_seating`(`exam_sub_stu_ID`, `ClassID`, `class_row`, `class_col`) VALUES ('$stu_ID','$ClassID','$class_row','$class_col')";
+                            }
+                            $conn->query($seatingdata);
+                            $class_col++;
+                        }
+                    }
+                    $class_row++;
+                }
+
+            }
+            
+            
+            
+            
+        } else {
+            echo "<h1>Error: Invalid input</h1>";
+            echo "<p>Please ensure the number of subjects and corresponding details are provided correctly.</p>";
+        }
+    }
+}
+    echo "<a href='ClassSelect.php'><button>Reselect Classes</button></a>";
+
+
+function getclass($totalStudents,$classValues){
+    global $conn;
+    $class_strength=0;
+    $class_id=1;
+    $class=0;
+    $class_data=[];
+    $ClassVa = explode(',', $classValues);
+    sort($ClassVa);
+    while($class_strength<$totalStudents){
+        
+        if($classValues==0||count($ClassVa)==0||(!$ClassVa[$class])){
+            $sql = "SELECT * FROM classroom WHERE ClassID = $class_id";
+            $MainClassID=$class_id;
+        }else{
+            $sql = "SELECT * FROM classroom WHERE ClassID = ".$ClassVa[$class];
+            $MainClassID=$ClassVa[$class];
+        }
+
+        
+        $result = $conn->query($sql);
+        if($result->num_rows>0){
+            $row = $result->fetch_assoc();
+            $class_strength+= $row['ClassRows']*$row['ClassColumns'];
+            $class_data[$class]=[
+                'ClassID'=>$MainClassID,
+                'ClassName'=>$row['ClassName'],
+                'ClassColumns'=>$row['ClassColumns'],
+                'ClassRows'=>$row['ClassRows'],
+            ];
+        }else{
+            $class_data[$class]=[
+                'ClassID'=>$class_id,
+                'ClassName'=>"UNKNOWN",
+                'ClassColumns'=>5,
+                'ClassRows'=>7,
+            ];
+            $class_strength+= 5*7;
+        }
+        $class++;
+        $class_id++;
+    }
+    return $class_data;
+}
+?>
+
+
+<?php
+    $selectdate="SELECT DISTINCT(ExamDate) FROM `examsubjects` WHERE ExamID=$Eid ";
+    $updatestatus="UPDATE `examination` SET `Status`='-1' WHERE ExamID=$Eid";
+    $conn->query($updatestatus);
+    $datedetails=$conn->query($selectdate);
+    while($datedetailsrow=$datedetails->fetch_assoc()){
+        $departmentDatav1=[];
+        $ExamDates=$datedetailsrow['ExamDate'];
+        echo "<h1>Seating Arrangements on {$ExamDates}</h1>";
+        $classselect="SELECT * FROM classroom WHERE ClassID IN (SELECT DISTINCT(exam_stu_seating.ClassID) FROM `exam_stu_seating` 
+        INNER JOIN exam_students on exam_students.exam_sub_stu_ID=exam_stu_seating.exam_sub_stu_ID
+        INNER JOIN examsubjects on examsubjects.examsubjectsID=exam_students.examsubjectsID
+        WHERE examsubjects.ExamDate='$ExamDates')";
+        $classrooms=$conn->query($classselect);
+        $classnum=1;
+        while ($classroom=$classrooms->fetch_assoc()) {
+            $delay=0.0;
+            $TheclassID=$classroom['ClassID'];
+            echo "<div class='classroom'>";
+            echo "<h2>Classroom {$classnum} ({$classroom['ClassName']})<b style='font-size:17px;'>(Columns: {$classroom['ClassColumns']}, Rows: {$classroom['ClassRows']})</b></h2>";
+            echo "<table border='1' style='border-collapse: collapse;'>";
+            $i=1;
+            echo"<tr>";
+            echo"<td></td>";
+            while ((int)$classroom['ClassColumns']>=$i) {
+                if($i%2==1&&$i!=1){
+                    echo "<td style='border:none'></td>";
+                }
+                echo"<td> C$i</td>";
+                $i++;
+
+            }
+                echo"</tr>";
+            $j=1;
+            $studentsSelect="SELECT exam_students.RollNo,students_details.Department,exam_stu_seating.class_row,exam_stu_seating.class_col
+            FROM `exam_stu_seating` 
+            INNER JOIN exam_students on exam_students.exam_sub_stu_ID=exam_stu_seating.exam_sub_stu_ID
+            INNER JOIN examsubjects on examsubjects.examsubjectsID=exam_students.examsubjectsID
+            INNER JOIN students_details on students_details.RollNo=exam_students.RollNo
+            WHERE examsubjects.ExamDate='$ExamDates' AND exam_stu_seating.ClassID=$TheclassID";
+            // echo $studentsSelect."<br>";
+            $studentsseats=$conn->query($studentsSelect);
+            $classseatings=[];
+            $classseatings=array_fill(0, $classroom['ClassRows'], array_fill(0, $classroom['ClassColumns'], ''));;
+            while ($seats=$studentsseats->fetch_assoc()) {
+                // echo $seats['class_row']." : ".$seats['class_col']."  =  ".$seats['RollNo']."<br>";
+                $classseatings[$seats['class_row']-1][$seats['class_col']-1]=$seats['Department']."-".$seats['RollNo'];
+            }
+            foreach ($classseatings as $row) {
+                echo "<tr>";
+                echo"<td>R$j</td>";
+                $j++;
+                $temp=1;
+                foreach ($row as $seat) {
+                    $Details = explode('-', $seat);
+                    $index = array_search($Details[0], $departmentDatav1);
+                    if($index === false){
+                        $departmentDatav1[] = $Details[0];
+                        $index = array_search($Details[0], $departmentDatav1);
+                    }
+                    
+
+                    if($temp%2==1&&$temp!=1){
+                        echo "<td style='border:none'></td>";
+                    }
+                    $newcolor="style='background-color:".$colors[$index]."; animation-delay: ".$delay."s;'";
+                    echo "<td " . ($seat ?  $newcolor : "") . "  class='" . ($seat ? "seat" : "nill") . "'>" . ($seat ? $Details[1] : 'Nill') . "</td>";
+                    $temp++;
+                }
+                echo "</tr>";
+                $delay+=0.05;
+            }
+            echo "</table>";
+            echo "</div>";
+        }
+        
+    }
+
+?>
+
+</body>
+</html>
